@@ -1,8 +1,5 @@
-// import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-// import { Document } from 'mongoose';
-
-export type UserDocument = User;
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Exclude, instanceToPlain } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -10,10 +7,20 @@ export class User {
   id: number;
 
   @Column()
-  username: string;
+  name: string;
+
+  @Column({ unique: true })
+  email: string;
 
   @Column()
+  @Exclude()
   password: string;
-}
 
-// export const UserSchema = SchemaFactory.createForClass(User);
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
+
+  toJSON() { return instanceToPlain(this) }
+}

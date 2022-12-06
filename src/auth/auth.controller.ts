@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/users/users.model';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from './dto/createUser.dto';
 
 @Controller()
 export class AuthController {
@@ -12,23 +13,20 @@ export class AuthController {
         private authService: AuthService
     ) { }
 
-    @Post('auth/signup')
-    async createUser(
-        @Body('password') password: string,
-        @Body('username') username: string,
+    @UseGuards(AuthGuard('local'))
+    @Post('register')
+    async register(
+        @Body() data: CreateUserDto
     ): Promise<User> {
         const saltOrRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-        const result = await this.usersService.createUser(
-            username,
-            hashedPassword,
-        );
+        const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
+        const result = await this.usersService.create({ ...data, password: hashedPassword });
         return result;
     }
 
     @UseGuards(AuthGuard('local'))
-    @Post('auth/login')
-    async login(@Request() req) {
+    @Post('login')
+    async login(@Request() req ) {
         return this.authService.login(req.user);
     }
 }
