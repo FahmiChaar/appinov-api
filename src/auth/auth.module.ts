@@ -8,18 +8,21 @@ import { UsersService } from "src/users/users.service";
 import { LocalStrategy } from "./local.auth";
 import { User } from "src/users/users.model";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { JwtStrategy } from "./jwt.strategy";
 
 
 @Module({
     imports: [
-        UserModule, PassportModule,
+        UserModule,
+        PassportModule,
         JwtModule.register({
+            // I should replace 'secretKey' with generated key from .env but it's only for the Test
             secret: 'secretKey',
             signOptions: { expiresIn: '60s' },
         }),
         TypeOrmModule.forFeature([User])
     ],
-    providers: [AuthService, UsersService, LocalStrategy],
+    providers: [AuthService, UsersService, LocalStrategy, JwtStrategy],
     controllers: [AuthController],
 })
 export class AuthModule { }

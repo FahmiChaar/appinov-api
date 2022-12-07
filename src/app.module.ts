@@ -6,6 +6,7 @@ import { BooksModule } from './books/books.module';
 
 @Module({
   imports: [
+    // I should place all option to .env file but it's only for the Test
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
