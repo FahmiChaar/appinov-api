@@ -13,7 +13,7 @@
 - All routes are protected from the front and the API
 
 ### Pre-request
-- I use Mysql
+- I used Mysql
 - You need to create a database named "appinov_test"
 - Changing the database password located in app.module.ts if needed
 
