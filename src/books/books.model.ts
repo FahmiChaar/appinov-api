@@ -1,26 +1,22 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Exclude, instanceToPlain } from 'class-transformer';
 
-@Entity('users')
-export class User {
+@Entity('books')
+export class Book {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ unique: true })
-  email: string;
+  @Column('int')
+  pages: string;
 
   @Column()
-  @Exclude()
-  password: string;
+  author: string;
 
   @CreateDateColumn()
   createdAt: Date
 
   @UpdateDateColumn()
   updatedAt: Date
-
-  toJSON() { return instanceToPlain(this) }
 }

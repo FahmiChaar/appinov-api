@@ -5,23 +5,27 @@ import { User } from 'src/users/users.model';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from './dto/createUser.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller()
 export class AuthController {
     constructor(
         private usersService: UsersService,
-        private authService: AuthService
+        private authService: AuthService,
+        private jwtService: JwtService
     ) { }
 
-    @UseGuards(AuthGuard('local'))
     @Post('register')
     async register(
         @Body() data: CreateUserDto
-    ): Promise<User> {
+    ): Promise<any> {
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(data.password, saltOrRounds);
-        const result = await this.usersService.create({ ...data, password: hashedPassword });
-        return result;
+        const user = await this.usersService.create({ ...data, password: hashedPassword });
+        return {
+            user,
+            token: this.jwtService.sign({ email: user.email, sub: user.id }),
+        };
     }
 
     @UseGuards(AuthGuard('local'))

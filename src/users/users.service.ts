@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-// import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-// import { Model } from 'mongoose';
 import { User } from './users.model';
 import { CreateUserDto } from '../auth/dto/createUser.dto';
 
@@ -25,7 +23,7 @@ export class UsersService {
         })
     }
 
-    async find(query: object): Promise<User> {
+    find(query: object): Promise<User> {
         return this.userRepository.findOneBy(query);
     }
 }

@@ -1,25 +1,25 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/users.model';
+import { BooksModule } from './books/books.module';
 
 @Module({
   imports: [
-    // MongooseModule.forRoot('mongodb://127.0.0.1/authentication'),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
+      password: 'root',
       database: 'appinov_test',
-      entities: [User],
       synchronize: true,
-      dropSchema: true
+      dropSchema: false,
+      autoLoadEntities: true
     }),
     UserModule,
     AuthModule,
+    BooksModule
   ],
   controllers: [],
   providers: [],
